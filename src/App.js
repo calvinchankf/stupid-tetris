@@ -40,7 +40,6 @@ class App extends Component {
 
 			let [isTouched, newPuzzle] = this.checkIfTouched();
 
-			// TODO: change to if collided
 			if (!isTouched) {
 				this.paintBoard(newPuzzle);
 			} else {
@@ -50,6 +49,12 @@ class App extends Component {
 					const key = `${cell[0]},${cell[1]}`;
 					this.props.occupieds[key] = true;
 				}
+				// clear if necessary
+				const fullRows = this.findFullRows();
+				if (fullRows.length > 0) {
+					await delay(200);
+				}
+				this.clearFullRows(fullRows);
 				// drop a new puzzle
 				newPuzzle = [
 					[0, 4],
@@ -200,6 +205,50 @@ class App extends Component {
 			board[x][y] = 1;
 		}
 		return board;
+	};
+
+	findFullRows = () => {
+		const { board } = this.state;
+		const fullRows = [];
+		for (let i = 0; i < board.length; i++) {
+			let isFull = true;
+			for (let j = 0; j < board[i].length; j++) {
+				if (board[i][j] === 0) {
+					isFull = false;
+					break;
+				}
+			}
+			if (isFull) {
+				fullRows.push(i);
+			}
+		}
+		return fullRows;
+	};
+
+	clearFullRows = fullRows => {
+		const { occupieds } = this.props;
+		const keys = Object.keys(occupieds);
+		for (let idx = 0; idx < keys.length; idx++) {
+			const key = keys[idx];
+			let [i, j] = key.split(",");
+			i = parseInt(i);
+			j = parseInt(j);
+			if (fullRows.indexOf(i) > -1) {
+				delete occupieds[key];
+			} else {
+				let n = 0;
+				fullRows.forEach(row => {
+					if (row > i) {
+						n += 1;
+					}
+				});
+				if (n > 0) {
+					delete occupieds[key];
+					const newKey = `${i + n},${j}`;
+					occupieds[newKey] = true;
+				}
+			}
+		}
 	};
 
 	render = () => {
