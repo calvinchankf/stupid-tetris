@@ -1,22 +1,32 @@
 .App {
-  text-align: center;
+	text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
+.board {
+	display: block;
+	margin: auto;
+	width: 331px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.row {
+	display: flex;
 }
 
-.App-link {
-  color: #09d3ac;
+.cell {
+	height: 32px;
+	width: 32px;
+	border-top: 1px solid rgb(128, 128, 128);
+	border-left: 1px solid rgb(128, 128, 128);
+}
+
+.last-col {
+	border-right: 1px solid rgb(128, 128, 128);
+}
+
+.last-row {
+	border-bottom: 1px solid rgb(128, 128, 128);
+}
+
+.colored {
+	background-color: cadetblue;
 }
