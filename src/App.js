@@ -5,7 +5,7 @@ import { getRandomPuzzle } from "./PuzzleFactory";
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 let puzzleInstance;
-
+let occupieds = {};
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -41,7 +41,7 @@ class App extends Component {
 				for (let i = 0; i < puzzle.length; i++) {
 					const cell = puzzle[i];
 					const key = `${cell[0]},${cell[1]}`;
-					this.props.occupieds[key] = true;
+					occupieds[key] = true;
 				}
 				// clear if necessary
 				const fullRows = this.findFullRows();
@@ -133,7 +133,7 @@ class App extends Component {
 				newI === 20 ||
 				newJ < 0 ||
 				newJ === 10 ||
-				key in this.props.occupieds
+				key in occupieds
 			) {
 				isCollided = true;
 				break;
@@ -155,7 +155,7 @@ class App extends Component {
 				newI === 20 ||
 				newJ < 0 ||
 				newJ === 10 ||
-				key in this.props.occupieds
+				key in occupieds
 			) {
 				isCollided = true;
 				break;
@@ -172,7 +172,7 @@ class App extends Component {
 			const cell = puzzle[i];
 			const newI = cell[0] + 1;
 			const key = `${newI},${cell[1]}`;
-			if (newI === 20 || key in this.props.occupieds) {
+			if (newI === 20 || key in occupieds) {
 				isTouched = true;
 				break;
 			}
@@ -203,7 +203,6 @@ class App extends Component {
 	};
 
 	paintOccupiesdOnBoard = board => {
-		const { occupieds } = this.props;
 		for (const key in occupieds) {
 			let [x, y] = key.split(",");
 			x = parseInt(x);
@@ -232,7 +231,7 @@ class App extends Component {
 	};
 
 	clearFullRows = fullRows => {
-		const { occupieds } = this.props;
+		const newOccupied = {};
 		const keys = Object.keys(occupieds);
 		for (let idx = 0; idx < keys.length; idx++) {
 			const key = keys[idx];
@@ -240,7 +239,7 @@ class App extends Component {
 			i = parseInt(i);
 			j = parseInt(j);
 			if (fullRows.indexOf(i) > -1) {
-				delete occupieds[key];
+				continue;
 			} else {
 				let n = 0;
 				fullRows.forEach(row => {
@@ -249,12 +248,14 @@ class App extends Component {
 					}
 				});
 				if (n > 0) {
-					delete occupieds[key];
 					const newKey = `${i + n},${j}`;
-					occupieds[newKey] = true;
+					newOccupied[newKey] = true;
+				} else {
+					newOccupied[key] = true;
 				}
 			}
 		}
+		occupieds = newOccupied;
 	};
 
 	render = () => {
@@ -285,9 +286,5 @@ class App extends Component {
 		return <div>{boardDiv}</div>;
 	};
 }
-
-App.defaultProps = {
-	occupieds: {}
-};
 
 export default App;
