@@ -23,17 +23,13 @@ class App extends Component {
 	componentDidMount = async () => {
 		const { puzzle } = this.state;
 
-		window.addEventListener("keydown", function(event) {
-			const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
-			console.log("😭", key);
-		});
+		this.addEventListeners();
 
 		// paint puzzle on board
 		const b = this.paintPuzzleOnBoard(puzzle);
 		this.setState({ board: b });
 
 		// time interval or while loop?
-
 		// setInterval(() => {
 		while (true) {
 			const { puzzle } = this.state;
@@ -42,7 +38,7 @@ class App extends Component {
 				break;
 			}
 
-			let [isTouched, newPuzzle] = this.checkCollisionNext();
+			let [isTouched, newPuzzle] = this.checkIfTouched();
 
 			// TODO: change to if collided
 			if (!isTouched) {
@@ -85,6 +81,65 @@ class App extends Component {
 		return board;
 	};
 
+	addEventListeners = () => {
+		window.addEventListener(
+			"keydown",
+			function(event) {
+				const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+				let isCollided;
+				let newPuzzle;
+				switch (key) {
+					case "ArrowRight":
+						[isCollided, newPuzzle] = this.movePuzzle(0, 1);
+						if (!isCollided) {
+							this.paintBoard(newPuzzle);
+						}
+						break;
+					case "ArrowDown":
+						[isCollided, newPuzzle] = this.movePuzzle(1, 0);
+						if (!isCollided) {
+							this.paintBoard(newPuzzle);
+						}
+						break;
+					case "ArrowLeft":
+						[isCollided, newPuzzle] = this.movePuzzle(0, -1);
+						if (!isCollided) {
+							this.paintBoard(newPuzzle);
+						}
+						break;
+					default:
+						break;
+				}
+			}.bind(this)
+		);
+	};
+
+	movePuzzle = (di, dj) => {
+		const { puzzle } = this.state;
+		let isCollided = false;
+		let newPuzzle = [];
+		for (let i = 0; i < puzzle.length; i++) {
+			const cell = puzzle[i];
+			const newI = cell[0] + di;
+			const newJ = cell[1] + dj;
+			const key = `${newI},${newJ}`;
+			if (
+				newI < 0 ||
+				newI === 20 ||
+				newJ < 0 ||
+				newJ === 10 ||
+				key in this.props.occupieds
+			) {
+				isCollided = true;
+				break;
+			}
+			newPuzzle.push([newI, newJ]);
+		}
+		return [isCollided, newPuzzle];
+	};
+
+	// TODO: rotate
+
 	checkCollision = () => {
 		const { puzzle } = this.state;
 		let isCollided = false;
@@ -99,7 +154,7 @@ class App extends Component {
 		return isCollided;
 	};
 
-	checkCollisionNext = () => {
+	checkIfTouched = () => {
 		const { puzzle } = this.state;
 		let isTouched = false;
 		let newPuzzle = [];
@@ -111,7 +166,7 @@ class App extends Component {
 				isTouched = true;
 				break;
 			}
-			newPuzzle.push([cell[0] + 1, cell[1]]);
+			newPuzzle.push([newI, cell[1]]);
 		}
 		return [isTouched, newPuzzle];
 	};
