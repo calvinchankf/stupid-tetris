@@ -1,40 +1,34 @@
 import React, { Component } from "react";
 import "./App.css";
+import { getRandomPuzzle } from "./PuzzleFactory";
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
+
+let puzzleInstance;
 
 class App extends Component {
 	constructor(props) {
 		super(props);
 
-		const puzzle = [
-			[0, 4],
-			[0, 5],
-			[1, 4],
-			[1, 5]
-		];
-
 		this.state = {
 			board: this.createBoard(),
-			puzzle
+			puzzle: undefined
 		};
 	}
 
 	componentDidMount = async () => {
-		const { puzzle } = this.state;
-
-		this.addEventListeners();
+		this.addGameEventListeners();
 
 		// paint puzzle on board
-		const b = this.paintPuzzleOnBoard(puzzle);
-		this.setState({ board: b });
+		puzzleInstance = getRandomPuzzle();
+		this.paintBoard(puzzleInstance.coordinates);
+		await delay(500);
 
 		// time interval or while loop?
-		// setInterval(() => {
 		while (true) {
 			const { puzzle } = this.state;
 
-			if (this.checkCollision()) {
+			if (this.checkCollision(puzzle)) {
 				break;
 			}
 
@@ -43,7 +37,7 @@ class App extends Component {
 			if (!isTouched) {
 				this.paintBoard(newPuzzle);
 			} else {
-				// put puzzle in occupied
+				// put puzzle in the hashtable
 				for (let i = 0; i < puzzle.length; i++) {
 					const cell = puzzle[i];
 					const key = `${cell[0]},${cell[1]}`;
@@ -52,21 +46,15 @@ class App extends Component {
 				// clear if necessary
 				const fullRows = this.findFullRows();
 				if (fullRows.length > 0) {
-					await delay(200);
+					await delay(100);
 				}
 				this.clearFullRows(fullRows);
 				// drop a new puzzle
-				newPuzzle = [
-					[0, 4],
-					[0, 5],
-					[1, 4],
-					[1, 5]
-				];
-				this.paintBoard(newPuzzle);
+				puzzleInstance = getRandomPuzzle();
+				this.paintBoard(puzzleInstance.coordinates);
 			}
-			await delay(200);
+			await delay(500);
 		}
-		// }, 200);
 
 		const c = window.confirm("❌❌❌ GAME OVER ❌❌❌");
 		if (c) {
@@ -86,7 +74,7 @@ class App extends Component {
 		return board;
 	};
 
-	addEventListeners = () => {
+	addGameEventListeners = () => {
 		window.addEventListener(
 			"keydown",
 			function(event) {
@@ -94,6 +82,18 @@ class App extends Component {
 				let isCollided;
 				let newPuzzle;
 				switch (key) {
+					case "ArrowUp":
+						const res = puzzleInstance.rotate();
+						const shapeIdx = res[0];
+						newPuzzle = res[1];
+						if (!this.checkCollision(newPuzzle)) {
+							puzzleInstance.setShapeIdxAndCoordinates(
+								shapeIdx,
+								newPuzzle
+							);
+							this.paintBoard(newPuzzle);
+						}
+						break;
 					case "ArrowRight":
 						[isCollided, newPuzzle] = this.movePuzzle(0, 1);
 						if (!isCollided) {
@@ -143,15 +143,20 @@ class App extends Component {
 		return [isCollided, newPuzzle];
 	};
 
-	// TODO: rotate
-
-	checkCollision = () => {
-		const { puzzle } = this.state;
+	checkCollision = puzzle => {
 		let isCollided = false;
 		for (let i = 0; i < puzzle.length; i++) {
 			const cell = puzzle[i];
-			const key = `${cell[0]},${cell[1]}`;
-			if (key in this.props.occupieds) {
+			const newI = cell[0];
+			const newJ = cell[1];
+			const key = `${newI},${newJ}`;
+			if (
+				newI < 0 ||
+				newI === 20 ||
+				newJ < 0 ||
+				newJ === 10 ||
+				key in this.props.occupieds
+			) {
 				isCollided = true;
 				break;
 			}
@@ -177,6 +182,7 @@ class App extends Component {
 	};
 
 	paintBoard = puzzle => {
+		puzzleInstance.setCoordinates(puzzle);
 		let b = this.paintPuzzleOnBoard(puzzle);
 		b = this.paintOccupiesdOnBoard(b);
 		this.setState({
