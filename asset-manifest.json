@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/stupid-tetris/static/css/main.8c66ca65.chunk.css",
-    "main.js": "/stupid-tetris/static/js/main.d689487b.chunk.js",
-    "main.js.map": "/stupid-tetris/static/js/main.d689487b.chunk.js.map",
+    "main.js": "/stupid-tetris/static/js/main.b9588182.chunk.js",
+    "main.js.map": "/stupid-tetris/static/js/main.b9588182.chunk.js.map",
     "runtime-main.js": "/stupid-tetris/static/js/runtime-main.6a9af912.js",
     "runtime-main.js.map": "/stupid-tetris/static/js/runtime-main.6a9af912.js.map",
     "static/js/2.7dc543d3.chunk.js": "/stupid-tetris/static/js/2.7dc543d3.chunk.js",
     "static/js/2.7dc543d3.chunk.js.map": "/stupid-tetris/static/js/2.7dc543d3.chunk.js.map",
     "index.html": "/stupid-tetris/index.html",
-    "precache-manifest.cb0fb876d5b95f8d9dbbf95d56638bf0.js": "/stupid-tetris/precache-manifest.cb0fb876d5b95f8d9dbbf95d56638bf0.js",
+    "precache-manifest.6a3d4dddca6c70b5e9c102b48755e56f.js": "/stupid-tetris/precache-manifest.6a3d4dddca6c70b5e9c102b48755e56f.js",
     "service-worker.js": "/stupid-tetris/service-worker.js",
     "static/css/main.8c66ca65.chunk.css.map": "/stupid-tetris/static/css/main.8c66ca65.chunk.css.map"
   },
@@ -16,6 +16,6 @@
     "static/js/runtime-main.6a9af912.js",
     "static/js/2.7dc543d3.chunk.js",
     "static/css/main.8c66ca65.chunk.css",
-    "static/js/main.d689487b.chunk.js"
+    "static/js/main.b9588182.chunk.js"
   ]
 }
