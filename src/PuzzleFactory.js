@@ -1,6 +1,6 @@
 import Puzzle from "./Puzzle";
 
-const O = {
+const W = {
 	shapes: [
 		[
 			[1, 1],
@@ -75,7 +75,53 @@ const T = {
 	anchor: [1, 1]
 };
 
-const shapes = [O, I, T];
+const Z = {
+	shapes: [
+		[
+			[1, 1, 0],
+			[0, 1, 1],
+			[0, 0, 0]
+		],
+		[
+			[0, 0, 1],
+			[0, 1, 1],
+			[0, 1, 0]
+		]
+	],
+	shapeIdx: 0,
+	coordinates: [
+		[1, 5],
+		[0, 5],
+		[0, 4],
+		[1, 6]
+	],
+	anchor: [1, 1]
+};
+
+const S = {
+	shapes: [
+		[
+			[0, 1, 1],
+			[1, 1, 0],
+			[0, 0, 0]
+		],
+		[
+			[1, 0, 0],
+			[1, 1, 0],
+			[0, 1, 0]
+		]
+	],
+	shapeIdx: 0,
+	coordinates: [
+		[1, 5],
+		[0, 5],
+		[0, 6],
+		[1, 4]
+	],
+	anchor: [1, 1]
+};
+
+const shapes = [W, I, T, Z, S];
 
 const getRandomPuzzle = () => {
 	const r = Math.floor(Math.random() * shapes.length);
