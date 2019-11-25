@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c3f7675065ec6d84b3248a64b5ea1eb5",
+    "revision": "cedc2926f6140b9e538e036866879939",
     "url": "/stupid-tetris/index.html"
   },
   {
-    "revision": "df0c4efa73b7953429e2",
+    "revision": "25c0781177403bfb3774",
     "url": "/stupid-tetris/static/css/main.8c66ca65.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/stupid-tetris/static/js/2.7dc543d3.chunk.js"
   },
   {
-    "revision": "df0c4efa73b7953429e2",
-    "url": "/stupid-tetris/static/js/main.b9588182.chunk.js"
+    "revision": "25c0781177403bfb3774",
+    "url": "/stupid-tetris/static/js/main.adf4bf0c.chunk.js"
   },
   {
     "revision": "ccdada84afdd6978fd83",
