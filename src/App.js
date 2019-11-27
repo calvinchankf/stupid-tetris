@@ -283,7 +283,16 @@ class App extends Component {
 
 		const boardDiv = <div className="board">{rowDivs}</div>;
 
-		return <div>{boardDiv}</div>;
+		return <div>
+			<div>
+				<div>Keyboard Controls</div>
+				<div>ArrowUp: rotate</div>
+				<div>ArrowRight: to the left</div>
+				<div>ArrowLeft: to the right</div>
+				<div>ArrowDown: drop faster</div>
+			</div>
+			{boardDiv}
+		</div>;
 	};
 }
 
